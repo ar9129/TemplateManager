@@ -16,12 +16,12 @@ public class TemplateRepositoryImpl implements TemplateRepository {
                             <h2>Employee Report</h2>
                             <table border="1" style="width:100%;">
                                 <tr style="background-color: #f2f2f2;">
-                                    <th>Name</th><th>Role</th><th>Salary</th>
+                                    <th>Name</th><th>Role</th><th th:if="${!isConsolidated}">Salary</th>
                                 </tr>
                                 <tr th:each="emp : ${employees}">
                                     <td th:text="${emp.name}"></td>
                                     <td th:text="${emp.role}"></td>
-                                    <td th:text="${emp.salary}"></td>
+                                    <td th:if="${!isConsolidated}" th:text="${emp.salary}"></td>
                                 </tr>
                             </table>
                             {{historyReport}}

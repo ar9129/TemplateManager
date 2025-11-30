@@ -33,7 +33,7 @@ public class ConsolidationController {
         this.stringTemplateEngine = stringTemplateEngine;
         this.pdfGenerationService = pdfGenerationService;}
 
-    private Context getReportContext() {
+    private Context getReportContext(boolean isConsolidated) {
         Context context = new Context();
 
         context.setVariable("employees", List.of(
@@ -45,6 +45,9 @@ public class ConsolidationController {
                 new Department("HR", 50),
                 new Department("Finance", 100)
         ));
+
+        context.setVariable("isConsolidated", isConsolidated);
+
         return context;
     }
 
@@ -53,7 +56,7 @@ public class ConsolidationController {
     public ResponseEntity<byte[]> generateConsolidatedReport() throws Exception {
 
         String stitchedHTML = templateStitcher.stitchTemplate("CONSOLIDATED_MASTER");
-        String renderedHtml = stringTemplateEngine.process(stitchedHTML, getReportContext());
+        String renderedHtml = stringTemplateEngine.process(stitchedHTML, getReportContext(true));
         byte[] pdfBytes = pdfGenerationService.generatePdfFromHtml(renderedHtml);
         return getPdfResponse(pdfBytes, "Consolidated_Report.pdf");
     }
