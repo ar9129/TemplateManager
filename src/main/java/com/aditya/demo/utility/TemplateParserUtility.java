@@ -11,28 +11,13 @@ import java.util.stream.Collectors;
 
 @Component
 public class TemplateParserUtility {
-
-    private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\{\\{(\\w+)\\}\\}");
-
-    private static final Pattern INCLUSION_PATTERN = Pattern.compile("\\[\\[(\\w+)\\]\\]");
-
-    public List<String> discoverSubTemplate(String template) {
-        if(template == null || template.isEmpty()){
-            return List.of();
-        }
-        Matcher matcher = INCLUSION_PATTERN.matcher(template);
-//        return matcher.find() ? new ArrayList<>(matcher.group(1)) : new ArrayList<>();
-        return matcher.results()
-                .map(match -> match.group(1))
-                .collect(Collectors.toList());
-    }
+    private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\{\\{(\\w+)}}");
 
     public List<String> discoverPlaceHolders(String template) {
         if(template == null || template.isEmpty()){
             return List.of();
         }
         Matcher matcher = PLACEHOLDER_PATTERN.matcher(template);
-//        return matcher.find() ? new ArrayList<>(matcher.group(1)) : new ArrayList<>();
         return matcher.results()
                 .map(match -> match.group(1))
                 .collect(Collectors.toList());

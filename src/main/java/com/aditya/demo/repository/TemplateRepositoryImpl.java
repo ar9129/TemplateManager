@@ -10,21 +10,9 @@ public class TemplateRepositoryImpl implements TemplateRepository {
     @Override
     public List<TemplateEntity> findAll() {
         return List.of(
-//                new TemplateEntity("departmentReport", "<div th:fragment=\"departmentFragment\">...</div>"),
-//                new TemplateEntity("historyReport", "<div th:fragment=\"historyFragment\">...</div>"),
-//                new TemplateEntity("employeeReport", "<div th:fragment=\"employeeFragment\">{{historyReport}}...</div>"),
-//                new TemplateEntity("CONSOLIDATED_MASTER", "<!DOCTYPE html>...{{employeeReport}}<hr>{{departmentReport}}..."),
-//                new TemplateEntity("L3_ReportA", "Template L3A content"),
-//                new TemplateEntity("L2_Section1", "Section 1 includes: {{L3_ReportA}}")
-//        );
-//    }
-//}
-
-
                 new TemplateEntity("employeeReport", """
                         <div th:fragment="employeeFragment">
-//                            [[historyTemplate]]
-                            {{historyTemplate}}
+                        
                             <h2>Employee Report</h2>
                             <table border="1" style="width:100%;">
                                 <tr style="background-color: #f2f2f2;">
@@ -36,6 +24,9 @@ public class TemplateRepositoryImpl implements TemplateRepository {
                                     <td th:text="${emp.salary}"></td>
                                 </tr>
                             </table>
+                            {{historyReport}}
+                            {{CONSOLIDATED_MASTER}}
+                            {{historyReport}}
                         </div>
                         """),
 
@@ -76,13 +67,9 @@ public class TemplateRepositoryImpl implements TemplateRepository {
                         <body>
                             <h1 style="text-align: center;">-- Consolidated Report --</h1>
                             <p>Report Date: <span th:text="${reportDate}"></span></p>
-                        
-//                            [[employeeReport]]
                             {{employeeReport}}
                         
                             <hr style="margin: 30px 0;"></hr>
-                        
-//                            [[departmentReport]]
                             {{departmentReport}}
                         
                         </body>

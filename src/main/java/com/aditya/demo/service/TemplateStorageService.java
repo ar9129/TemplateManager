@@ -38,10 +38,10 @@ public class TemplateStorageService {
         List<TemplateEntity> templates = templateRepository.findAll();
         Map<String, TemplateConfig> newTemplateRegistry = new HashMap<>();
         for (TemplateEntity template : templates) {
-            List<String>subTemplates = templateParserUtility.discoverSubTemplate(template.getTemplateContent()) ;
+//            List<String>subTemplates = templateParserUtility.discoverSubTemplate(template.getTemplateContent()) ;
             List<String>placeholders = templateParserUtility.discoverPlaceHolders(template.getTemplateContent()) ;
 
-            TemplateConfig config = new TemplateConfig(template.getTemplateContent(), subTemplates, placeholders);
+            TemplateConfig config = new TemplateConfig(template.getTemplateContent(), placeholders);
             newTemplateRegistry.put(template.getTemplateName(), config);
 
         }
