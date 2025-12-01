@@ -2,6 +2,8 @@ package com.aditya.demo.utility;
 
 import com.aditya.demo.model.TemplateConfig;
 import com.aditya.demo.service.TemplateStorageService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
@@ -9,23 +11,34 @@ import java.util.List;
 import java.util.Set;
 
 @Component
-public class TemplateStitcher {
+public class TemplateBinder {
 
     private final TemplateStorageService templateStorageService;
+    private static final int MAX_DEPTH = 5;
+    private static final Logger log = LoggerFactory.getLogger(TemplateBinder.class);
 
-    public TemplateStitcher(TemplateStorageService templateStorageService) {
+
+
+    public TemplateBinder(TemplateStorageService templateStorageService) {
         this.templateStorageService = templateStorageService;
     }
 
-    public String stitchTemplate(String templateKey) {
-        return stitchRecursive(templateKey, new HashSet<>());
+    public String bindTemplate(String templateKey) {
+        return bindRecursive(templateKey, new HashSet<>(),0);
+
+
     }
 
-    private String stitchRecursive(String templateKey, Set<String> visiting) {
+    private String bindRecursive(String templateKey, Set<String> visiting, int depth) {
+
+        if (depth == MAX_DEPTH) {
+            log.warn("Max depth exceeded for {}", templateKey) ;
+            return "";
+        }
 
         // --- CIRCULAR DEPENDENCY GUARD ---
         if (visiting.contains(templateKey)) {
-            System.out.println("⚠ Circular dependency detected: " + templateKey);
+            log.warn("Circular dependency found: " + templateKey);
             return "";
         }
 
@@ -50,12 +63,12 @@ public class TemplateStitcher {
 
             if (dependencyConfig == null) {
                 // Nothing available to replace -> leave literal unchanged
-                System.out.println(" ⚠ No template found for placeholder: " + placeholder);
+                log.info(" No template found for placeholder: " + placeholder);
                 continue;
             }
 
             // Recursively stitch dependency content
-            String resolved = stitchRecursive(placeholder, visiting);
+            String resolved = bindRecursive(placeholder, visiting,depth + 1);
 
             // Replace the {{placeholder}} occurrence
             content = content.replace(placeholderLiteral, resolved);

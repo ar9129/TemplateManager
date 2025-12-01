@@ -3,9 +3,7 @@ package com.aditya.demo.controller;
 import com.aditya.demo.model.Department;
 import com.aditya.demo.model.Employee;
 import com.aditya.demo.service.PdfGenerationService;
-import com.aditya.demo.service.TemplateStorageService;
-import com.aditya.demo.utility.TemplateStitcher;
-import jakarta.annotation.PostConstruct;
+import com.aditya.demo.utility.TemplateBinder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -14,22 +12,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
-import java.time.LocalDate;
 import java.util.List;
-import java.util.Locale;
 
 @Controller
 public class ConsolidationController {
 
-    private final TemplateStitcher templateStitcher;
+    private final TemplateBinder templateBinder;
     private final TemplateEngine stringTemplateEngine;
     private final PdfGenerationService pdfGenerationService;
 
     public ConsolidationController(
-            TemplateStitcher templateStitcher,
+            TemplateBinder templateBinder,
             TemplateEngine stringTemplateEngine,
             PdfGenerationService pdfGenerationService) {
-        this.templateStitcher = templateStitcher;
+        this.templateBinder = templateBinder;
         this.stringTemplateEngine = stringTemplateEngine;
         this.pdfGenerationService = pdfGenerationService;}
 
@@ -55,7 +51,7 @@ public class ConsolidationController {
     @GetMapping("/report/consolidated")
     public ResponseEntity<byte[]> generateConsolidatedReport() throws Exception {
 
-        String stitchedHTML = templateStitcher.stitchTemplate("CONSOLIDATED_MASTER");
+        String stitchedHTML = templateBinder.bindTemplate("CONSOLIDATED_MASTER");
         String renderedHtml = stringTemplateEngine.process(stitchedHTML, getReportContext(true));
         byte[] pdfBytes = pdfGenerationService.generatePdfFromHtml(renderedHtml);
         return getPdfResponse(pdfBytes, "Consolidated_Report.pdf");
