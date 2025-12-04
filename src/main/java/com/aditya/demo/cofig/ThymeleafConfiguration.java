@@ -1,6 +1,5 @@
 package com.aditya.demo.cofig;
 
-import com.aditya.demo.service.TemplateStorageService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.thymeleaf.TemplateEngine;

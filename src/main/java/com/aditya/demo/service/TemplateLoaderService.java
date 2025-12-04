@@ -12,19 +12,16 @@ import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
 @Service
-public class TemplateStorageService {
+public class TemplateLoaderService {
 
     private final TemplateRepository templateRepository;
 
     private final TemplateParserUtility templateParserUtility;
 
-
-    private final Map<String, String> templates = new HashMap<>();
-
     private volatile Map<String, TemplateConfig> templateRegistry = new HashMap<>();
 
 
-    public TemplateStorageService(TemplateRepository templateRepository, TemplateParserUtility templateParserUtility) {
+    public TemplateLoaderService(TemplateRepository templateRepository, TemplateParserUtility templateParserUtility) {
         this.templateRepository = templateRepository;
         this.templateParserUtility = templateParserUtility;
     }
