@@ -1,13 +1,15 @@
 package com.aditya.demo.loader;
 
-import com.aditya.demo.constants.TemplateContents;
+import com.aditya.demo.template.TemplateContents;
 import com.aditya.demo.constants.TemplateIds;
 import com.aditya.demo.model.TemplateEntity;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
 
 @Component
+@Profile("local")
 public class InMemoryTemplateLoader implements TemplateLoader {
     @Override
     public List<TemplateEntity> loadTemplates() {

@@ -1,4 +1,4 @@
-package com.aditya.demo.cofig;
+package com.aditya.demo.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

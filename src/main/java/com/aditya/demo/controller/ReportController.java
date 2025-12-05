@@ -1,22 +1,13 @@
 package com.aditya.demo.controller;
 
-import com.aditya.demo.model.Department;
-import com.aditya.demo.model.Employee;
-import com.aditya.demo.service.PdfGenerationService;
 import com.aditya.demo.service.ReportGenerationService;
-import com.aditya.demo.utility.TemplateBinder;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
-import org.thymeleaf.TemplateEngine;
-import org.thymeleaf.context.Context;
-
-import java.util.List;
 
 @RestController
 public class ReportController {

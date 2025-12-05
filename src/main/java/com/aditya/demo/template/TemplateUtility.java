@@ -1,4 +1,4 @@
-package com.aditya.demo.utility;
+package com.aditya.demo.template;
 
 
 import com.aditya.demo.constants.TemplateConstants;
@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 
 
 @Component
-public class TemplateParserUtility {
+public class TemplateUtility {
     public List<String> discoverPlaceHolders(String template) {
         if(template == null || template.isEmpty()){
             return List.of();

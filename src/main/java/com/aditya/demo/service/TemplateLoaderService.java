@@ -7,7 +7,7 @@ import java.util.Map;
 import com.aditya.demo.model.TemplateConfig;
 import com.aditya.demo.model.TemplateEntity;
 import com.aditya.demo.repository.TemplateRepository;
-import com.aditya.demo.utility.TemplateParserUtility;
+import com.aditya.demo.template.TemplateUtility;
 import jakarta.annotation.PostConstruct;
 import org.springframework.stereotype.Service;
 
@@ -16,14 +16,14 @@ public class TemplateLoaderService {
 
     private final TemplateRepository templateRepository;
 
-    private final TemplateParserUtility templateParserUtility;
+    private final TemplateUtility templateUtility;
 
     private volatile Map<String, TemplateConfig> templateRegistry = new HashMap<>();
 
 
-    public TemplateLoaderService(TemplateRepository templateRepository, TemplateParserUtility templateParserUtility) {
+    public TemplateLoaderService(TemplateRepository templateRepository, TemplateUtility templateUtility) {
         this.templateRepository = templateRepository;
-        this.templateParserUtility = templateParserUtility;
+        this.templateUtility = templateUtility;
     }
 
     @PostConstruct
@@ -35,7 +35,7 @@ public class TemplateLoaderService {
         List<TemplateEntity> templates = templateRepository.findAll();
         Map<String, TemplateConfig> newTemplateRegistry = new HashMap<>();
         for (TemplateEntity template : templates) {
-            List<String>placeholders = templateParserUtility.discoverPlaceHolders(template.getTemplateContent()) ;
+            List<String>placeholders = templateUtility.discoverPlaceHolders(template.getTemplateContent()) ;
 
             TemplateConfig config = new TemplateConfig(template.getTemplateContent(), placeholders);
             newTemplateRegistry.put(template.getTemplateName(), config);

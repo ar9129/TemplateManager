@@ -1,4 +1,4 @@
-package com.aditya.demo.utility;
+package com.aditya.demo.template;
 
 import com.aditya.demo.constants.TemplateConstants;
 import com.aditya.demo.exception.*;
@@ -8,6 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
+import javax.lang.model.type.IntersectionType;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -16,9 +17,8 @@ import java.util.Set;
 public class TemplateBinder {
 
     private final TemplateLoaderService templateLoaderService;
-    private static final int MAX_DEPTH = 3;
-    private static final Logger log = LoggerFactory.getLogger(TemplateBinder.class);
 
+    private static final Logger log = LoggerFactory.getLogger(TemplateBinder.class);
 
 
     public TemplateBinder(TemplateLoaderService templateLoaderService) {
@@ -31,12 +31,13 @@ public class TemplateBinder {
 
     }
 
-    private String bindRecursive(String templateKey, Set<String> visiting, int depth) {
+    private String bindRecursive(String templateKey, Set<String> visiting, Integer depth) {
 
         if (templateKey == null || templateKey.isBlank()) {
             throw new ValidationException(templateKey);
         }
 
+        Integer MAX_DEPTH = TemplateConstants.MAX_DEPTH;
         if (depth >= MAX_DEPTH) {
             log.warn("Max depth exceeded for {}", templateKey);
             throw new MaxDepthExceededException(templateKey, MAX_DEPTH);

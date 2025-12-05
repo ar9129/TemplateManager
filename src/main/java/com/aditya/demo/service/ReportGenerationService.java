@@ -1,14 +1,11 @@
 package com.aditya.demo.service;
 
 
-import com.aditya.demo.model.Department;
-import com.aditya.demo.model.Employee;
-import com.aditya.demo.utility.TemplateBinder;
+import com.aditya.demo.context.ReportContextBuilder;
+import com.aditya.demo.template.TemplateBinder;
 import org.springframework.stereotype.Service;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.TemplateEngine;
-
-import java.util.List;
 
 @Service
 public class ReportGenerationService {
@@ -16,38 +13,29 @@ public class ReportGenerationService {
     private final TemplateBinder templateBinder;
     private final TemplateEngine templateEngine;
     private final PdfGenerationService pdfGenerationService;
+    private final ReportContextBuilder contextBuilder;
 
     public ReportGenerationService(TemplateBinder templateBinder,
                                    TemplateEngine templateEngine,
-                                   PdfGenerationService pdfGenerationService) {
+                                   PdfGenerationService pdfGenerationService, ReportContextBuilder contextBuilder) {
         this.templateBinder = templateBinder;
         this.templateEngine = templateEngine;
         this.pdfGenerationService = pdfGenerationService;
+        this.contextBuilder = contextBuilder;
     }
 
-    public byte[] generateConsolidatedReportPdf(String tenplateKey) throws Exception {
+    public byte[] generateReportPdf(String templateKey) throws Exception {
         // 1. Bind template
-        String stitchedHtml = templateBinder.bindTemplate(tenplateKey);
+        String stitchedHtml = templateBinder.bindTemplate(templateKey);
 
-        // 2. Render HTML with context
-        String renderedHtml = templateEngine.process(stitchedHtml, createConsolidatedContext());
+        //2. Create Context
+        Context context = contextBuilder.buildContext();
 
-        // 3. Generate PDF
+        // 3. Render HTML with context
+        String renderedHtml = templateEngine.process(stitchedHtml, context);
+
+        // 4. Generate PDF
         return pdfGenerationService.generatePdfFromHtml(renderedHtml);
-    }
-
-    private Context createConsolidatedContext() {
-        Context context = new Context();
-        context.setVariable("employees", List.of(
-                new Employee("Alice", "Manager", 90000),
-                new Employee("Bob", "Analyst", 65000)
-        ));
-        context.setVariable("departments", List.of(
-                new Department("HR", 50),
-                new Department("Finance", 100)
-        ));
-        context.setVariable("isConsolidated", true);
-        return context;
     }
 }
 

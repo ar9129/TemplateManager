@@ -1,4 +1,4 @@
-package com.aditya.demo.constants;
+package com.aditya.demo.template;
 
 public final class TemplateContents {
 
